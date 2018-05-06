@@ -23,7 +23,7 @@ requirements:
   run:
     - python
     - boto >=2.32
-    - bz2file
+    - bz2file  # [py2k]
     - requests
     - boto3
     - google-cloud-storage
