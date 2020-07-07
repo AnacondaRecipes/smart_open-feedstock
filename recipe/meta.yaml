@@ -18,12 +18,11 @@ build:
 
 requirements:
   host:
-    - python
+    - python >=3.5
     - pip
   run:
-    - python
+    - python >=3.5
     - boto >=2.32
-    - bz2file  # [py2k]
     - requests
     - boto3
     - google-cloud-storage
