@@ -18,11 +18,12 @@ build:
 
 requirements:
   host:
-    - python >=3.5
+    - python >=3.6
     - pip
   run:
-    - python >=3.5
-    - boto >=2.32
+    - python >=3.6
+    # Strictly speaking, These are "extras" requirements, but the package
+    # wouldn't be particularly useful without them.
     - requests
     - boto3
     - google-cloud-storage
@@ -33,7 +34,6 @@ test:
     - responses
   imports:
     - smart_open
-    - smart_open.tests
 
 about:
   home: https://github.com/RaRe-Technologies/smart_open
