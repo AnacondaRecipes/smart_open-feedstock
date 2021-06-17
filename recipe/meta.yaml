@@ -1,6 +1,6 @@
 {% set name = "smart_open" %}
-{% set version = "5.0.0" %}
-{% set sha256 = "02e5e02207d955a1f9fd924c37900ac272536bd24393ae731b6945d4f766015f" %}
+{% set version = "5.1.0" %}
+{% set sha256 = "e4dc1350b240ef0759e343e4e2f361bfd4e5477bb2619866e97f80240652e92e" %}
 
 package:
   name: {{ name|lower }}
@@ -20,6 +20,8 @@ requirements:
   host:
     - python >=3.6
     - pip
+    - setuptools
+    - wheel
   run:
     - python >=3.6
     # Strictly speaking, These are "extras" requirements, but the package
@@ -32,6 +34,9 @@ test:
   requires:
     - mock
     - responses
+    - pip
+  commands:
+    - pip check
   imports:
     - smart_open
 
@@ -48,6 +53,7 @@ about:
     HTTP, HTTPS, SFTP, or local filesystem.  It supports transparent,
     on-the-fly (de-)compression for a variety of different formats.
   dev_url: https://github.com/RaRe-Technologies/smart_open
+  doc_url: https://github.com/RaRe-Technologies/smart_open/blob/develop/README.rst
 
 extra:
   recipe-maintainers:
