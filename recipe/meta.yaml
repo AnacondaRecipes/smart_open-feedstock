@@ -20,6 +20,8 @@ requirements:
   host:
     - python >=3.6
     - pip
+    - setuptools
+    - wheel
   run:
     - python >=3.6
     # Strictly speaking, These are "extras" requirements, but the package
@@ -32,6 +34,9 @@ test:
   requires:
     - mock
     - responses
+    - pip
+  commands:
+    - pip check
   imports:
     - smart_open
 
@@ -48,6 +53,7 @@ about:
     HTTP, HTTPS, SFTP, or local filesystem.  It supports transparent,
     on-the-fly (de-)compression for a variety of different formats.
   dev_url: https://github.com/RaRe-Technologies/smart_open
+  doc_url: https://github.com/RaRe-Technologies/smart_open/blob/develop/README.rst
 
 extra:
   recipe-maintainers:
