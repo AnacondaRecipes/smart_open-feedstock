@@ -12,23 +12,18 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  noarch: python
+  skip: True  # [py<36]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
 
 requirements:
   host:
-    - python >=3.6
+    - python
     - pip
     - setuptools
     - wheel
   run:
-    - python >=3.6
-    # Strictly speaking, These are "extras" requirements, but the package
-    # wouldn't be particularly useful without them.
-    - requests
-    - boto3
-    - google-cloud-storage
+    - python
 
 test:
   requires:
