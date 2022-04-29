@@ -24,6 +24,11 @@ requirements:
     - wheel
   run:
     - python
+    # Strictly speaking, These are "extras" requirements, but the package
+    # wouldn't be particularly useful without them.
+    #- requests
+    #- boto3
+    #- google-cloud-storage
 
 test:
   requires:
