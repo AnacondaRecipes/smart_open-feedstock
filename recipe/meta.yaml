@@ -1,6 +1,6 @@
 {% set name = "smart_open" %}
-{% set version = "5.1.0" %}
-{% set sha256 = "e4dc1350b240ef0759e343e4e2f361bfd4e5477bb2619866e97f80240652e92e" %}
+{% set version = "5.2.1" %}
+{% set sha256 = "75abf758717a92a8f53aa96953f0c245c8cedf8e1e4184903db3659b419d4c17" %}
 
 package:
   name: {{ name|lower }}
@@ -12,23 +12,23 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  noarch: python
+  skip: True  # [py<36]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
 
 requirements:
   host:
-    - python >=3.6
+    - python
     - pip
     - setuptools
     - wheel
   run:
-    - python >=3.6
+    - python
     # Strictly speaking, These are "extras" requirements, but the package
     # wouldn't be particularly useful without them.
-    - requests
-    - boto3
-    - google-cloud-storage
+    #- requests
+    #- boto3
+    #- google-cloud-storage
 
 test:
   requires:
