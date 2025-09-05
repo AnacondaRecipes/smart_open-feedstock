@@ -1,52 +1,74 @@
 {% set name = "smart_open" %}
-{% set version = "5.2.1" %}
-{% set sha256 = "75abf758717a92a8f53aa96953f0c245c8cedf8e1e4184903db3659b419d4c17" %}
+{% set version = "7.3.0.post1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://github.com/piskvorky/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 09cb7f240d628a532b3b34182f4fb66d9b9c9b27c49fabbf8fe5a43ab7c90bdd
 
 build:
-  skip: True  # [py<36]
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: True  # [py<38]
 
 requirements:
   host:
-    - python
     - pip
-    - setuptools
+    - python
     - wheel
+    - setuptools >=64
+    - setuptools_scm >=8
   run:
     - python
-    # Strictly speaking, These are "extras" requirements, but the package
-    # wouldn't be particularly useful without them.
-    #- requests
-    #- boto3
-    #- google-cloud-storage
+    - wrapt
+  run_constrained:
+    # gcs
+    - google-cloud-storage >=2.6.0
+
+# E   ModuleNotFoundError: No module named 'azure'
+{% set ignore_tests = " --ignore=tests/test_azure.py" %}
+# E   ModuleNotFoundError: No module named 'google'
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_gcs.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_smart_open.py" %}
+# >   raise BadGzipFile('Not a gzipped file (%r)' % magic)
+# E   gzip.BadGzipFile: Not a gzipped file (b'48')
+{% set deselect_tests = " --deselect=tests/test_s3.py::ReaderTest::test_text_iterator" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_gzip" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_buffered_writer" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_write" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_buffered_writer" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::OpenTest::test_read_never_returns_none" %}
+# >   self.assertEqual(contents, boto3_body)
+# E   AssertionError: b'the spice melange\n' != b'12\r\nthe spice melange\n\r\n0\r\nx-amz-checksum-crc32:OcGXLA==\r\n\r\n'
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_to_boto3" %}
 
 test:
-  requires:
-    - mock
-    - responses
-    - pip
-  commands:
-    - pip check
+  source_files:
+    - tests
   imports:
     - smart_open
+  commands:
+    - pip check
+    - pytest -v tests {{ ignore_tests }} {{ deselect_tests }}
+  requires:
+    - pip
+    - pytest
+    - pytest-rerunfailures
+    - responses
+    - paramiko
+    - boto3
+    - zstandard
+    - moto
 
 about:
   home: https://github.com/RaRe-Technologies/smart_open
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  summary: Python library for efficient streaming of large files
-
+  summary: Utils for streaming large files (S3, HDFS, GCS, SFTP, Azure Blob Storage, gzip, bz2, zst...)
   description: |
     smart_open is a Python 3 library for efficient streaming of very large
     files from/to storages such as S3, GCS, Azure Blob Storage, HDFS, WebHDFS,
