@@ -45,7 +45,7 @@ requirements:
 # E   AssertionError: b'the spice melange\n' != b'12\r\nthe spice melange\n\r\n0\r\nx-amz-checksum-crc32:OcGXLA==\r\n\r\n'
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_to_boto3" %}
 
-# On WIN, CI failed due to AttributeError: 'AttrDict' object has no attribute 'cmd'. Skip WIN.
+# On WIN, CI failed due to AttributeError: 'AttrDict' object has no attribute 'cmd'. Skip WIN. Worked locally.
 test:  # [not win]
   source_files:  # [not win]
     - tests  # [not win]
