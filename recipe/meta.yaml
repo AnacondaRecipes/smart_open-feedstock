@@ -45,23 +45,24 @@ requirements:
 # E   AssertionError: b'the spice melange\n' != b'12\r\nthe spice melange\n\r\n0\r\nx-amz-checksum-crc32:OcGXLA==\r\n\r\n'
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_to_boto3" %}
 
-test:
-  source_files:
-    - tests
-  imports:
-    - smart_open
-  commands:
-    - pip check
-    - pytest -v tests {{ ignore_tests }} {{ deselect_tests }}
-  requires:
-    - pip
-    - pytest
-    - pytest-rerunfailures
-    - responses
-    - paramiko
-    - boto3
-    - zstandard
-    - moto
+# On WIN, CI failed due to AttributeError: 'AttrDict' object has no attribute 'cmd'. Skip WIN.
+test:  # [not win]
+  source_files:  # [not win]
+    - tests  # [not win]
+  imports:  # [not win]
+    - smart_open  # [not win]
+  commands:  # [not win]
+    - pip check  # [not win]
+    - pytest -v tests {{ ignore_tests }} {{ deselect_tests }}  # [not win]
+  requires:  # [not win]
+    - pip  # [not win]
+    - pytest  # [not win]
+    - pytest-rerunfailures  # [not win]
+    - responses  # [not win]
+    - paramiko  # [not win]
+    - boto3  # [not win]
+    - zstandard  # [not win]
+    - moto  # [not win]
 
 about:
   home: https://github.com/RaRe-Technologies/smart_open
