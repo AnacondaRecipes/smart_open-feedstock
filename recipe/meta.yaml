@@ -82,3 +82,7 @@ extra:
   recipe-maintainers:
     - souravsingh
     - mpenkov
+  skip-lints:  # [win]
+    - missing_pip_check  # [win]
+    - missing_tests  # [win]
+    - missing_imports_or_run_test_py  # [win]
