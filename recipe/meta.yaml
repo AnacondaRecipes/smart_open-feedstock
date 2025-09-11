@@ -1,5 +1,5 @@
 {% set name = "smart_open" %}
-{% set version = "7.3.0.post1" %}
+{% set version = "7.3.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/piskvorky/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 09cb7f240d628a532b3b34182f4fb66d9b9c9b27c49fabbf8fe5a43ab7c90bdd
+  sha256: 7b8ba726a8020a6e1643d21c59784b803daaae8fb3d131eb4d6194bd96377a00
 
 build:
   number: 0
