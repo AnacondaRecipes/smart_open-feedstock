@@ -1,5 +1,5 @@
 {% set name = "smart_open" %}
-{% set version = "7.3.1" %}
+{% set version = "7.5.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://github.com/piskvorky/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7b8ba726a8020a6e1643d21c59784b803daaae8fb3d131eb4d6194bd96377a00
+  sha256: 20b20c92fe538d957f05bba99477ababb64e9ceb47c7d48ea30184c0d0aefef4
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<38]
+  skip: True  # [py<39]
 
 requirements:
   host:
@@ -28,41 +28,31 @@ requirements:
     # gcs
     - google-cloud-storage >=2.6.0
 
-# E   ModuleNotFoundError: No module named 'azure'
-{% set ignore_tests = " --ignore=tests/test_azure.py" %}
 # E   ModuleNotFoundError: No module named 'google'
-{% set ignore_tests = ignore_tests + " --ignore=tests/test_gcs.py" %}
+{% set ignore_tests = "--ignore=tests/test_gcs.py" %}
 {% set ignore_tests = ignore_tests + " --ignore=tests/test_smart_open.py" %}
-# >   raise BadGzipFile('Not a gzipped file (%r)' % magic)
-# E   gzip.BadGzipFile: Not a gzipped file (b'48')
-{% set deselect_tests = " --deselect=tests/test_s3.py::ReaderTest::test_text_iterator" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_gzip" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_buffered_writer" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_write" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_buffered_writer" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::OpenTest::test_read_never_returns_none" %}
-# >   self.assertEqual(contents, boto3_body)
-# E   AssertionError: b'the spice melange\n' != b'12\r\nthe spice melange\n\r\n0\r\nx-amz-checksum-crc32:OcGXLA==\r\n\r\n'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_s3.py::MultipartWriterTest::test_to_boto3" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_compression.py" %} # [py<314]
 
-# On WIN, CI failed due to AttributeError: 'AttrDict' object has no attribute 'cmd'. Skip WIN. Worked locally.
-test:  # [not win]
-  source_files:  # [not win]
-    - tests  # [not win]
-  imports:  # [not win]
-    - smart_open  # [not win]
-  commands:  # [not win]
-    - pip check  # [not win]
-    - pytest -v tests {{ ignore_tests }} {{ deselect_tests }}  # [not win]
-  requires:  # [not win]
-    - pip  # [not win]
-    - pytest  # [not win]
-    - pytest-rerunfailures  # [not win]
-    - responses  # [not win]
-    - paramiko  # [not win]
-    - boto3  # [not win]
-    - zstandard  # [not win]
-    - moto  # [not win]
+test:
+  source_files:
+    - tests
+  imports:
+    - smart_open
+  commands:
+    - pip check
+    - pytest -v tests {{ ignore_tests }}
+  requires:
+    - pip
+    - pytest
+    - pytest-rerunfailures
+    - responses
+    - azure-storage-blob
+    - azure-common
+    - azure-core
+    - paramiko
+    - boto3
+    - zstandard
+    - moto
 
 about:
   home: https://github.com/RaRe-Technologies/smart_open
