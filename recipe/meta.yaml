@@ -37,7 +37,9 @@ test:
     - smart_open
   commands:
     - pip check
-    - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE
+    - set "REQUESTS_CA_BUNDLE="  # [win]
+    - set "AWS_CA_BUNDLE="       # [win]
+    - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE  # [unix]
     - pytest -v tests
   requires:
     - pip
@@ -46,9 +48,11 @@ test:
     - responses
     - azure-storage-blob
     - google-cloud-storage
+    - backports.zstd
     - azure-common
     - azure-core
     - paramiko
+    - cffi >=2.0.0
     - boto3
     - lz4
     - zstandard
