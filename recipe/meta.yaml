@@ -1,5 +1,5 @@
 {% set name = "smart_open" %}
-{% set version = "7.5.0" %}
+{% set version = "8.0.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,18 +7,17 @@ package:
 
 source:
   url: https://github.com/piskvorky/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 20b20c92fe538d957f05bba99477ababb64e9ceb47c7d48ea30184c0d0aefef4
+  sha256: 7e922762fd18aec7f4bec53cbaa943e5627d73882fb3c861612e0c1ce928e43f
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<39]
+  skip: true  # [py<310]
 
 requirements:
   host:
     - pip
     - python
-    - wheel
     - setuptools >=64
     - setuptools_scm >=8
   run:
@@ -27,11 +26,9 @@ requirements:
   run_constrained:
     # gcs
     - google-cloud-storage >=2.6.0
-
-# E   ModuleNotFoundError: No module named 'google'
-{% set ignore_tests = "--ignore=tests/test_gcs.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/test_smart_open.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/test_compression.py" %} # [py<314]
+    - azure-storage-blob >=12.7.0
+    - boto3 >=1.9.17
+    - backports.zstd >=1.0.0  # [py<314]
 
 test:
   source_files:
@@ -40,17 +37,20 @@ test:
     - smart_open
   commands:
     - pip check
-    - pytest -v tests {{ ignore_tests }}
+    - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE
+    - pytest -v tests
   requires:
     - pip
     - pytest
     - pytest-rerunfailures
     - responses
     - azure-storage-blob
+    - google-cloud-storage
     - azure-common
     - azure-core
     - paramiko
     - boto3
+    - lz4
     - zstandard
     - moto
 
