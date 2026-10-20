@@ -1,5 +1,5 @@
 {% set name = "smart_open" %}
-{% set version = "8.0.1" %}
+{% set version = "8.0.4" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/piskvorky/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7e922762fd18aec7f4bec53cbaa943e5627d73882fb3c861612e0c1ce928e43f
+  sha256: 36eb367686ddcf6712ac2ec7590b779c7301a6bca1d83eaa3bc84cea1d13396e
 
 build:
   number: 0
@@ -20,6 +20,7 @@ requirements:
     - python
     - setuptools >=64
     - setuptools_scm >=8
+    - setuptools-scm >=8
   run:
     - python
     - wrapt
@@ -38,7 +39,7 @@ test:
   commands:
     - pip check
     - set "REQUESTS_CA_BUNDLE="  # [win]
-    - set "AWS_CA_BUNDLE="       # [win]
+    - set "AWS_CA_BUNDLE="  # [win]
     - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE  # [unix]
     - pytest -v tests
   requires:
