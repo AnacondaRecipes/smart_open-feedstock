@@ -26,8 +26,11 @@ requirements:
   run_constrained:
     # gcs
     - google-cloud-storage >=2.6.0
+    # azure
     - azure-storage-blob >=12.7.0
+    # s3
     - boto3 >=1.9.17
+    # zst
     - backports.zstd >=1.0.0  # [py<314]
 
 test:
