@@ -1,5 +1,5 @@
 {% set name = "smart_open" %}
-{% set version = "8.0.1" %}
+{% set version = "8.0.4" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/piskvorky/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7e922762fd18aec7f4bec53cbaa943e5627d73882fb3c861612e0c1ce928e43f
+  sha256: 36eb367686ddcf6712ac2ec7590b779c7301a6bca1d83eaa3bc84cea1d13396e
 
 build:
   number: 0
@@ -26,8 +26,11 @@ requirements:
   run_constrained:
     # gcs
     - google-cloud-storage >=2.6.0
+    # azure
     - azure-storage-blob >=12.7.0
+    # s3
     - boto3 >=1.9.17
+    # zst
     - backports.zstd >=1.0.0  # [py<314]
 
 test:
